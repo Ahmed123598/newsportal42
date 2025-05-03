@@ -7,6 +7,7 @@ function India() {
     <div>
         
      <Navbar/>   
+     {/* test  */}
 <Newscard/>
 
 <Newscard/>
