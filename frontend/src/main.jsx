@@ -10,6 +10,8 @@ import Buisness from './pages/Business.jsx';
 import Sports from './pages/Sports.jsx';
 import Login from './pages/Login.jsx';
 import Business from './pages/Business.jsx';
+import DetailedNewsbar from './pages/DetailedNewsbar.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -22,7 +24,9 @@ createRoot(document.getElementById('root')).render(
       <Route path="/world" element={<World/>} />
       <Route path="/business" element={<Business/>} />
       <Route path="/sports" element={<Sports />} />
-      <Route path="login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/dnb" element={<DetailedNewsbar />} />
+      <Route path="/dash" element={<Dashboard />} />
 
     </Routes>
   </BrowserRouter>

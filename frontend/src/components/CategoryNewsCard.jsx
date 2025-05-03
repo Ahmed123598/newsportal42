@@ -1,12 +1,13 @@
 import React from 'react'
-
-const CategoryNewsCard = ({title="adsdads", description}) => {
+// import Buswebp from '../assets/Buss.webp'
+const CategoryNewsCard = ({ title,description,img
+}) => {
   return (
     <div className="p-6 md:w-1/3">
     <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
       <img
         className="lg:h-48 md:h-36 w-full object-cover object-center"
-        src="https://dummyimage.com/721x401"
+        src={img}
         alt="blog"
       />
       <div className="p-4">
@@ -20,7 +21,7 @@ const CategoryNewsCard = ({title="adsdads", description}) => {
         {description}
         </p>
         <div className="flex items-center flex-wrap">
-          <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
+          <a href='/india' className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
             Learn More
             <svg
               className="w-4 h-4 ml-2"

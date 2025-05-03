@@ -12,13 +12,13 @@ function App(){
     <Navbar/>
     
 <Title/>
-<div className='mx-18 font-bold  '>India News</div>
+<a href='/india'  className='mx-18 font-bold  '>India News</a>
 <CategoryNews/>
-<div className='mx-18 font-bold  '>World News</div>
+<a href= '/world' className='mx-18 font-bold  '>World News</a>
 <CategoryNews/> 
-<div className='mx-18 font-bold  '>Buisness News</div>
+<a href='/business' className='mx-18 font-bold  '>Buisness News</a>
 <CategoryNews/>
-<div className='mx-18 font-bold  '>Sports News</div>
+<a href='sports' className='mx-18 font-bold  '>Sports News</a>
 <CategoryNews/>
 </>
   )

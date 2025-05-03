@@ -8,7 +8,10 @@ function India() {
         
      <Navbar/>   
      {/* test  */}
-<Newscard/>
+<a href="/dnb">
+  
+ <Newscard/>
+</a>
 
 <Newscard/>
 
