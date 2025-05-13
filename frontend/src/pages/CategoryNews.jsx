@@ -1,34 +1,38 @@
-import React from "react";
-import CategoryNewsCard from "../components/CategoryNewsCard";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-function IndiaNews() {
+const CategoryNewsCard = ({ title, description, id, image }) => {
   return (
-    <div>
-      <section className="text-gray-600 body-font">
-        <div className="container px-5 py-10 mx-auto">
-          <div className="flex flex-wrap -m-4">
-            <CategoryNewsCard
-              title={
-                "Telangana: 12 injured as TGSTC, private bus collide on Srisailam highway"
-              }
-              description={
-                "The accident took place when the private bus, in order to avoid hitting a tipper parked on the road carriageway, moved on the wrong side and hit the TGSRTC bus at high speed.The passengers in both the buses suffered injuries. The local police on receiving information rushed to the spot. The injured persons were shifted in 108 ambulance to local hospitals and Osmania General Hospital for treatment. Heavy traffic jam was reported on the Srisailam Highway after the accident."
-              }
-              img={"../assets/Bus.webp"}
-            />
-            <CategoryNewsCard
-              title={"hello"}
-              description={"loremsafndsaich sahjdcbasduihcnsajkdcbnsa wiudebh"}
-            />
-            <CategoryNewsCard
-              title={"hello"}
-              description={"loremsafndsaich sahjdcbasduihcnsajkdcbnsa wiudebh"}
-            />
+    <div className="p-6 md:w-1/3">
+      <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+        <img
+          className="lg:h-48 md:h-36 w-full object-cover object-center"
+          src={image ? `http://localhost:3000${image}` : "https://dummyimage.com/721x401"}
+          alt="news"
+        />
+        <div className="p-4">
+          <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
+            CATEGORY
+          </h2>
+          <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
+            {title}
+          </h1>
+          <p className="leading-relaxed mb-3">
+            {description}
+          </p>
+          <div className="flex items-center flex-wrap">
+            <Link to={`/news/${id}`} className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
+              Learn More
+              <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
-}
+};
 
-export default IndiaNews;
+export default CategoryNewsCard;

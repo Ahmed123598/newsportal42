@@ -1,27 +1,20 @@
-import React from 'react'
-import Navbar from './components/Navbar'
-import CategoryNews from './pages/CategoryNews'
-import Title from './components/Title'
+import React from 'react';
+import Navbar from './components/Navbar';
+import Title from './components/Title';
 
-
-function App(){
+function App() {
   return (
     <>
-    
-
-    <Navbar/>
-    
-<Title/>
-<a href='/india'  className='mx-18 font-bold  '>India News</a>
-<CategoryNews/>
-<a href= '/world' className='mx-18 font-bold  '>World News</a>
-<CategoryNews/> 
-<a href='/business' className='mx-18 font-bold  '>Buisness News</a>
-<CategoryNews/>
-<a href='sports' className='mx-18 font-bold  '>Sports News</a>
-<CategoryNews/>
-</>
-  )
+      
+      <Title />
+      <div className="container mx-auto px-4">
+        <h1 className="text-2xl font-bold text-center my-6">Welcome to the News Portal</h1>
+        <p className="text-center text-gray-600">
+          Stay updated with the latest news from India, World, Business, and Sports.
+        </p>
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;

@@ -1,7 +1,8 @@
 import Navbar from '../components/Navbar';
 import React from "react";
 import { useForm } from "react-hook-form";
-
+import { Link } from 'react-router';
+import axios from 'axios'
 export default function AdminLogin() {
   const {
     register,
@@ -9,7 +10,17 @@ export default function AdminLogin() {
     formState: { errors }
   } = useForm();
   
+  const sendData=async (data) => {
+     try {
+  const res= await axios.post('http://localhost:3000/login',{data})
+  console.log(res)
+ } catch (error) {
+  console.log(error.message);
+  
+//  
+  }}
   const onSubmit = (data) => {
+sendData(data)
     console.log("Login Data:", data);
     // You can handle API login here
   };
@@ -18,7 +29,7 @@ export default function AdminLogin() {
   return (
     <div>
     <Navbar/>
-      <a href="/dash">Dashboard</a>
+      <Link to="/dashboard">Dashboard</Link>
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
@@ -59,4 +70,4 @@ export default function AdminLogin() {
     </div>
     </div>
   );
-}
+  }
