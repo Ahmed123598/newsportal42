@@ -1,32 +1,62 @@
-import React from 'react';
-import Sidebar from './Sidebar';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Dashboard = () => {
-  const stats = [
-    { label: 'Total News', value: 60 },
-    { label: 'Total Categories', value: 4 },
-    { label: 'India News', value: 10 },
-    { label: 'World News', value: 10 },
-    { label: 'business news', value: 10 },
-    { label: 'sports news', value: 10 },
-  ];
+export default function Dashboard() {
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate(); // For redirecting to login
 
-  return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 bg-white p-10">
-        <h1 className="text-lg font-medium mb-8">Welcome: <span className="font-semibold">UserName, or Full Name</span></h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-gray-200 p-6 rounded text-center shadow">
-              <div className="text-md font-medium capitalize">{stat.label}</div>
-              <div className="text-2xl font-bold mt-2">{stat.value}</div>
-            </div>
-          ))}
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Get JWT token
+                if (!token) {
+                    setError("No token found. Redirecting to login...");
+                    setTimeout(() => navigate('/login'), 2000);
+                    return;
+                }
+
+                const response = await axios.get('http://localhost:3000/dashboard', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                setUserData(response.data.user);
+            } catch (error) {
+                setError(error.response?.data?.message || "Failed to fetch dashboard data.");
+                setTimeout(() => navigate('/login'), 2000);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, [navigate]);
+
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+            <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+
+            {loading ? (
+                <p className="text-gray-600">Loading user data...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : (
+                <div className="bg-white p-6 rounded shadow-md w-full max-w-sm text-center">
+                    <h3 className="text-xl font-semibold mb-4">Welcome, {userData.firstName}!</h3>
+                    <p>Email: {userData.email}</p>
+                    <button
+                        className="mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+                        onClick={() => {
+                            localStorage.removeItem('token'); // Logout
+                            navigate('/login');
+                        }}
+                    >
+                        Logout
+                    </button>
+                </div>
+            )}
         </div>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+    );
+}

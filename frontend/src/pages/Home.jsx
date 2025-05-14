@@ -39,7 +39,10 @@ function Home() {
                             <div key={article.id} className="border p-4 rounded-lg shadow-md">
                                 <img className="w-full h-40 object-cover" src={`http://localhost:3000${article.image}`} alt="News" />
                                 <h2 className="text-lg font-bold mt-2">{article.title}</h2>
-                                <p className="text-gray-600">{article.description.substring(0, 100)}...</p>
+                               <p className="text-gray-600">
+  {article.description ? article.description.substring(0, 100) + "..." : "No description available"}
+</p>
+
                                 <Link to={`/news/${article.id}`} className="text-blue-500 mt-2 inline-block">Read More</Link>
                             </div>
                         ))}

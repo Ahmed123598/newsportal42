@@ -1,41 +1,45 @@
-const express = require('express')
-const router = express.Router()
-const { getAllUsers, createUsers, getSingleUser, getAllUsersEmail, updateUser, deleteUser, uploadProfilePic } = require('../controllers/UserController')
-const { login } = require('../controllers/authController')
-const auth = require('../middlewares/auth')
-const multer  = require('multer')
+const express = require('express');
+const router = express.Router();
+const { getAllUsers, createUsers, getSingleUser, getAllUsersEmail, updateUser, deleteUser, uploadProfilePic } = require('../controllers/UserController');
+const { login } = require('../controllers/authController');
+const auth = require('../middlewares/auth');
+const multer = require('multer');
+
+// ✅ Configure Multer for profile picture upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads')
+    cb(null, 'uploads');
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '.' + file.mimetype.split('/')[1]
-    cb(null, file.originalname + '-' + uniqueSuffix)
+    const uniqueSuffix = Date.now() + '.' + file.mimetype.split('/')[1];
+    cb(null, file.originalname + '-' + uniqueSuffix);
   }
-})
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage });
 
-// router.use(auth)
-// router.use(auth)//get all users
-router.get('/', [auth,], getAllUsers)
+// ✅ Protected route: Get all users (Requires JWT)
+router.get('/', auth, getAllUsers);
 
-router.post('/upload',upload.single('profile-pic') ,uploadProfilePic)
-//get  emails of all users
+// ✅ Upload profile picture
+router.post('/upload', upload.single('profile-pic'), uploadProfilePic);
 
-// create user
-router.post('/', createUsers)
-//get single user
-router.get('/:id', getSingleUser)
+// ✅ Create user
+router.post('/', createUsers);
 
-router.get('/emails', getAllUsersEmail)
+// ✅ Get single user
+router.get('/:id', auth, getSingleUser);
 
-//update user
-router.put('/:id', updateUser)
+// ✅ Get all user emails
+router.get('/emails', auth, getAllUsersEmail);
 
+// ✅ Update user
+router.put('/:id', auth, updateUser);
 
-//delete user
-router.delete('/:id', deleteUser)
+// ✅ Delete user
+router.delete('/:id', auth, deleteUser);
 
-router.post('/auth/login', login)
-module.exports = router
+// ✅ Login route
+router.post('/auth/login', login);
+
+module.exports = router;

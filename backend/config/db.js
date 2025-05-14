@@ -1,10 +1,9 @@
-const { Sequelize } = require('sequelize'); // Import Sequelize
+// backend/db.js
+const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('newsportal', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql'
+const sequelize = new Sequelize('newsportal_db', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql'
 });
-
-// ✅ Test the database connection
 
 module.exports = sequelize;
