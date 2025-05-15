@@ -10,7 +10,7 @@ function Sports() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news');
+                const response = await fetch('http://localhost:3000/news/sports');
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }
@@ -37,7 +37,7 @@ function Sports() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
                         {news.map((article) => (
                             <div key={article.id} className="border p-4 rounded-lg shadow-md">
-                                <img className="w-full h-40 object-cover" src={`http://localhost:3000${article.image}`} alt="News" />
+                                <img className="w-full h-40 object-cover" src={`http://localhost:3000${article.image}`} alt="News/india" />
                                 <h2 className="text-lg font-bold mt-2">{article.title}</h2>
                                <p className="text-gray-600">
   {article.description ? article.description.substring(0, 100) + "..." : "No description available"}

@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
+
 import { Link } from 'react-router-dom';
 
-function Home() {
+function LatestIndia() {
+
+
+ <div className="container mx-auto px-4 mt-6">
+      <h1 className="text-3xl font-bold">Latest India News</h1>
+      <Link to="/india" className="text-blue-500 mt-2 inline-block">
+        View More India News
+      </Link>
+    </div>
+
+
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,7 +20,7 @@ function Home() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news');
+                const response = await fetch('http://localhost:3000/news/india');
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }
@@ -30,9 +40,9 @@ function Home() {
 
     return (
         <div>
-            <Navbar />
+            
             <div className="container mx-auto px-4 mt-6">
-                <h1 className="text-3xl font-bold text-center">Featured News</h1>
+                <h1 className="text-3xl font-bold "> India News</h1>
                 {news.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
                         {news.map((article) => (
@@ -53,6 +63,8 @@ function Home() {
             </div>
         </div>
     );
+
+    
 }
 
-export default Home;
+export default LatestIndia;

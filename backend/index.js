@@ -1,94 +1,109 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const cors = require('cors');
-const jwt = require('jsonwebtoken'); // ✅ Import JWT
-const bcrypt = require('bcrypt'); // ✅ Import bcrypt for password hashing
-const sequelize = require('./config/db.js'); // ✅ Correct path
-// const sequelize = require('./db');
-// const db = require('./config/db.json'); // If it's a JSON file
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const sequelize = require("./config/db");
 
+// ✅ Import models
+const User = require("./models/userModel");
+const News = require("./models/newsModel");
+const Category = require("./models/categoryModel");
 
+// ✅ Import routes
+const userRoutes = require("./routes/UserRouter");
+const newsRoutes = require("./routes/postRouter");
 
-const User = require('./models/User'); // ✅ Import User model
-const News = require('./models/News'); // ✅ Import News model
-// const authenticateJWT = require('./middleware/authMiddleware.js'); // ✅ Import JWT middleware
-const authenticateJWT = require('./middlewares/auth'); // ✅ Correct path
+// ✅ Import authentication middleware
+const authenticateJWT = require("./middlewares/auth");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
+// ✅ Middleware Setup
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static files (uploaded images)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// ✅ Serve uploaded files (This ensures image URLs work)
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // ✅ Added here
 
-// ✅ Sync Database Models
+// ✅ Database Connection
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('✅ Database connected successfully.');
+        console.log("✅ Database connected successfully.");
     } catch (error) {
-        console.error('❌ Database connection error:', error);
+        console.error("❌ Database connection error:", error);
         process.exit(1);
     }
 };
-
 connectDB();
 
-
+// ✅ Sync Models
 const syncDb = async () => {
     try {
-        await sequelize.sync({ alter: true }); // ✅ Use `alter: true` to update models without dropping tables
-        console.log('✅ All models were synchronized successfully.');
+        await sequelize.sync({ alter: true }); // ✅ Ensures models stay updated
+        console.log("✅ Database models synchronized.");
     } catch (error) {
-        console.error('❌ Database sync error:', error);
+        console.error("❌ Database sync error:", error);
     }
 };
 syncDb();
 
-// ✅ API to Get All News Articles
-app.get('/news', async (req, res) => {
-    try {
-        const news = await News.findAll();
-        res.json(news);
-    } catch (error) {
-        console.error('❌ Error fetching news:', error.message);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+// ✅ Simple Test Route (`GET /`)
+app.get("/", (req, res) => {
+    res.json({ message: "🚀 Server is running!" });
 });
 
-// ✅ User Login API with JWT Authentication
-app.post('/login', async (req, res) => {
+// ✅ Mount Routes
+app.use("/users", userRoutes);
+app.use("/news", newsRoutes);
+
+app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // ✅ Find user in the database
         const user = await User.findOne({ where: { email } });
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-        // ✅ Compare passwords
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
+        if (user.password !== password) { // ✅ Direct string comparison, no hashing
+            return res.status(401).json({ message: "Invalid password" });
+        }
 
-        // ✅ Generate JWT token
-        const token = jwt.sign({ id: user.id, firstName: user.firstName }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: "Login successful", token });
     } catch (error) {
-        console.error('❌ Login error:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("❌ Login error:", error);
+        res.status(500).json({ message: error.message });
     }
 });
 
-// ✅ Protected Route Example (Requires JWT)
-app.get('/dashboard', authenticateJWT, (req, res) => {
-    res.json({ message: 'Welcome to the dashboard!', user: req.user });
+// ✅ Protected Dashboard API
+app.get("/dashboard", authenticateJWT, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.json({ message: "Welcome to the dashboard!", user });
+    } catch (error) {
+        console.error("❌ Dashboard error:", error);
+        res.status(500).json({ message: error.message });
+    }
 });
 
+app.get("/categories", async (req, res) => {
+    try {
+        const categories = await Category.findAll();
+        res.json(categories);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+});
+
+// ✅ Start Server
 app.listen(port, () => {
     console.log(`🚀 Server running on http://localhost:${port}`);
 });
-

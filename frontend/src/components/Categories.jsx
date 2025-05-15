@@ -1,12 +1,26 @@
 import React from 'react'
 import Sidebar from './Sidebar'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 const Categories = () => {
-    const newsItems = [
-        { sno: 1, title: "Breaking News", category: "India" },
-        { sno: 2, title: "Tech Innovations", category: "World" },
-        { sno: 3, title: "Business Growth", category: "Business" }
-      ];
+   
+   const [a,setA]= useState([])
+   useEffect(()=>{
+     const fetchd=async()=>{
+    try {
+ const api= await fetch('http://localhost:3000/categories')
+const json=await api.json()
+setA(json)
+       
+    } catch (error) {
+      console.log(error);
+      
+    }
+   
+    }
+    fetchd()
+   },[])
   return (
     <div>
         <div className="flex h-screen">
@@ -17,7 +31,7 @@ const Categories = () => {
       <div className="flex justify-between items-center mb-4">
         <span>User Name</span>
         <a href='/addnews'>
-        <button className="bg-red-600 text-white px-4 py-2 rounded">News post</button>
+        <button className="bg-red-600 text-white px-4 py-2 rounded">Category Add</button>
         </a>
       </div>
       <h2 className="text-xl font-bold mb-4">Categories</h2>
@@ -26,16 +40,14 @@ const Categories = () => {
           <tr>
             <th className="py-2 px-4 border-b">Sno</th>
             <th className="py-2 px-4 border-b">Title</th>
-            <th className="py-2 px-4 border-b">Category</th>
             <th className="py-2 px-4 border-b">Action</th>
           </tr>
         </thead>
         <tbody>
-          {newsItems.map((item) => (
-            <tr key={item.sno}>
-              <td className="py-2 px-4 border-b">{item.sno}</td>
-              <td className="py-2 px-4 border-b">{item.title}</td>
-              <td className="py-2 px-4 border-b">{item.category}</td>
+          {a.map((item) => (
+            <tr key={item.id}>
+              <td className="py-2 px-4 border-b">{item.id}</td>
+              <td className="py-2 px-4 border-b">{item.name}</td>
               <td className="py-2 px-4 border-b">
                 <button className="bg-red-600 text-white px-2 py-1 rounded mr-2">Edit</button>
                 <button className="bg-red-600 text-white px-2 py-1 rounded">Delete</button>

@@ -1,22 +1,49 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const authenticateJWT = (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ message: 'Access denied. No token provided.' });
-        }
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key"; 
 
-        const token = authHeader.split(' ')[1];
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
 
-        // ✅ Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Attach user data to request object
+  // ✅ Ensure authorization header exists and follows "Bearer <token>" format
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(403).json({ error: "Access denied, no valid token provided" });
+  }
 
-        next(); // Proceed to the next middleware or route handler
-    } catch (error) {
-        return res.status(403).json({ message: 'Invalid or expired token.' });
-    }
+  try {
+    const token = authHeader.split(" ")[1]; // ✅ Extract token correctly
+    const verified = jwt.verify(token, JWT_SECRET);
+    req.user = verified; // Attach verified user data to the request
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
 };
 
-module.exports = authenticateJWT;
+module.exports = verifyToken;
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // ✅ Find user by email
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) return res.status(404).json({ success: false, error: "User not found" });
+
+    // ✅ Compare plaintext passwords
+    if (user.password !== password) return res.status(401).json({ success: false, error: "Invalid password" });
+
+    // ✅ Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
+    res.status(200).json({ success: true, message: "Login successful", token });
+  } catch (error) {
+    console.error("🔴 Login error detected:", error); // ✅ Logs detailed errors
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
