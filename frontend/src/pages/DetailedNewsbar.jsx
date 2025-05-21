@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useParams } from 'react-router-dom';
+import Title from '../components/Title';
+import Footer from '../components/Footer';
 
 function DetailedNewsbar() {
     const [news, setNews] = useState(null);
@@ -16,6 +18,7 @@ function DetailedNewsbar() {
                     throw new Error('News not found');
                 }
                 const data = await response.json();
+                 console.log("Fetched News Item:", data);
                 setNews(data);
             } catch (error) {
                 setError(error.message);
@@ -30,19 +33,36 @@ function DetailedNewsbar() {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
+     
+   
         <div>
             <Navbar />
-            <div className="p-5 font-sans">
-                <div className="bg-red-900 h-48 w-full"></div>
-                <div className="mt-5">
-                    <p className="text-gray-500">Published: {news.created_at}</p>
-                    <h1 className="text-2xl font-bold">{news.title}</h1>
-                    <p className="mt-2 text-gray-700">{news.description}</p>
-                    {news.image && (
-                        <img className="mt-4 w-full h-64 object-cover" src={`http://localhost:3000/uploads/${news.image}`} alt="news" />
-                    )}
-                </div>
+            
+            {/* Full-width image at the top */}
+            {news.image && (
+                 <img
+  className="w-full h-[90vh] object-cover"
+  src={
+    news.image.includes("uploads")
+      ? `http://localhost:3000${news.image}`
+      : `http://localhost:3000/uploads/${news.image}`
+  }
+  onError={(e) =>
+    (e.target.src =
+      "https://dummyimage.com/800x400/cccccc/000000&text=Error+Loading")
+  }
+  alt="news"
+/>
+            )}
+
+            {/* Content section after the image */}
+            <div className="px-5 py-8 font-sans">
+                <p className="text-gray-500">Published: {news.created_at}</p>
+                <h1 className="text-3xl font-bold">{news.title}</h1>
+                <p className="mt-4 text-gray-700">{news.description}</p>
             </div>
+
+            <Footer />
         </div>
     );
 }

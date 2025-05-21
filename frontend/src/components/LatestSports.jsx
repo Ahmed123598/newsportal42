@@ -32,7 +32,7 @@ function LatestSports() {
         <div>
           
             <div className="container mx-auto px-4 mt-6">
-                <h1 className="text-3xl font-bold ">Sports News</h1>
+                {/* <h1 className="text-3xl font-bold ">Sports News</h1> */}
                 {news.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
                         {news.map((article) => (

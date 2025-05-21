@@ -13,7 +13,7 @@ const Category = require("./models/categoryModel");
 
 // ✅ Import routes
 const userRoutes = require("./routes/UserRouter");
-const newsRoutes = require("./routes/postRouter");
+const newsRoutes = require("./routes/newsRouter");
 
 // ✅ Import authentication middleware
 const authenticateJWT = require("./middlewares/auth");
@@ -50,7 +50,7 @@ const syncDb = async () => {
         console.error("❌ Database sync error:", error);
     }
 };
-syncDb();
+// syncDb();
 
 // ✅ Simple Test Route (`GET /`)
 app.get("/", (req, res) => {

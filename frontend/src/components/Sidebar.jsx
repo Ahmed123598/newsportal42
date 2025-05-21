@@ -8,7 +8,7 @@ const Sidebar = () => {
                 <div className="text-xl font-bold mb-10">LOGO</div>
                 <ul className="space-y-4">
                     <li className="text-black font-semibold cursor-pointer">
-                     <Link to='/dash'>DashBoard</Link> </li>
+                     <Link to='/dashboard'>DashBoard</Link> </li>
                     <li className="text-black cursor-pointer">
                         <Link to='/news'>Newss</Link>
                     </li>
@@ -24,8 +24,9 @@ const Sidebar = () => {
             </div>
             <div className="text-black font-semibold cursor-pointer">
                 
-             <Link to='/' >Logout</Link>  
-                </div>
+             <Link onClick={()=>localStorage.removeItem('token')} to='/' >Logout</Link>  
+
+            </div>
         </div>
     );
 };

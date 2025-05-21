@@ -20,13 +20,14 @@ function LatestIndia() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news/india');
+                const response = await fetch('http://localhost:3000/news/category/4');
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }
                 const data = await response.json();
                 setNews(data);
             } catch (error) {
+console.error("❌ Error fetching news:", error);
                 setError(error.message);
             } finally {
                 setLoading(false);
@@ -42,7 +43,7 @@ function LatestIndia() {
         <div>
             
             <div className="container mx-auto px-4 mt-6">
-                <h1 className="text-3xl font-bold "> India News</h1>
+                {/* <h1 className="text-3xl font-bold "> India News</h1> */}
                 {news.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
                         {news.map((article) => (
@@ -53,7 +54,7 @@ function LatestIndia() {
   {article.description ? article.description.substring(0, 100) + "..." : "No description available"}
 </p>
 
-                                <Link to={`/news/${article.id}`} className="text-blue-500 mt-2 inline-block">Read More</Link>
+                                <Link to={`/news/${article.id}=`} className="text-blue-500 mt-2 inline-block">Read More</Link>
                             </div>
                         ))}
                     </div>

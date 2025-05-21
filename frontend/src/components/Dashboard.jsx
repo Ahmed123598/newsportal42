@@ -4,78 +4,70 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 
 export default function Dashboard() {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate(); // For redirecting to login
-
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const token = localStorage.getItem("token"); // Get JWT token
-        if (!token) {
-          setError("No token found. Redirecting to login...");
-          setTimeout(() => navigate("/login"), 2000);
-          return;
-        }
-
-        const response = await axios.get("http://localhost:3000/dashboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUserData(response.data.user);
-      } catch (error) {
-        setError(
-          error.response?.data?.message || "Failed to fetch dashboard data."
-        );
-        setTimeout(() => navigate("/login"), 2000);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [navigate]);
-
-  return (
-    <div>
-      <div className="flex h-screen">
-        <Sidebar />
-
-        <div className="p-4"> 
-            Dashboard
-          <div className="flex justify-between items-center mb-4">
-            <span>User Name</span>
-            
-          </div>
-          <h2 className="text-xl font-bold mb-4">Dashboard</h2>
+    const [newsData, setNewsData] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const token = localStorage.getItem("token"); 
+                if (!token) {
+                    setError("❌ No token found. Redirecting...");
+                    setTimeout(() => navigate("/login"), 2000);
+                    return;
+                }
+
+                const response = await axios.get("http://localhost:3000/news/dashboard", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                setNewsData(response.data || {});
+            } catch (error) {
+                setError(error.response?.data?.message || "Failed to fetch dashboard data.");
+                setTimeout(() => navigate("/login"), 2000);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, [navigate]);
+
+    return (
+        <div className="flex h-screen">
+            <Sidebar />
+            <div className="p-4 w-full">
+                <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+
+                {loading ? (
+                    <p className="text-gray-600">⏳ Loading data...</p>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded shadow-md">
+                        {/* Clickable Cards */}
+                        {[
+                            { title: "📰 Total News", key: "totalNews", path: "/news" },
+                            { title: "🇮🇳 India News", key: "indiaNews", path: "/news/category/4" },
+                            { title: "🌎 World News", key: "worldNews", path: "/news/category/3" },
+                            { title: "⚽ Sports News", key: "sportsNews", path: "/news/category/1" },
+                            { title: "💰 Business News", key: "businessNews", path: "/news/category/2" },
+                        ].map(({ title, key, path }) => (
+                            <div 
+                                key={key} 
+                                className="bg-blue-100 p-4 rounded text-center cursor-pointer hover:bg-blue-200 transition"
+                                onClick={() => navigate(path)}
+                            >
+                                <h3 className="text-xl font-semibold">{title}</h3>
+                                <p className="text-lg font-bold">{newsData[key]}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
-      </div>
-    </div>
-
-    // <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-    //     <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
-
-    //     {loading ? (
-    //         <p className="text-gray-600">Loading user data...</p>
-    //     ) : error ? (
-    //         <p className="text-red-500">{error}</p>
-    //     ) : (
-    //         <div className="bg-white p-6 rounded shadow-md w-full max-w-sm text-center">
-    //             <h3 className="text-xl font-semibold mb-4">Welcome, {userData.firstName}!</h3>
-    //             <p>Email: {userData.email}</p>
-    //             <button
-    //                 className="mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
-    //                 onClick={() => {
-    //                     localStorage.removeItem('token'); // Logout
-    //                     navigate('/login');
-    //                 }}
-    //             >
-    //                 Logout
-    //             </button>
-    //         </div>
-    //     )}
-    // </div>
-  );
+    );
 }

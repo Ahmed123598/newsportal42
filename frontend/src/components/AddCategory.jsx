@@ -1,24 +1,62 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import Sidebar from './Sidebar';
 
-export default function AddCategory() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
-  console.log(errors);
-  
+const AddCategory = () => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log('Category Data:', data);
+    // You can send this data to your API here
+    navigate('/admin/categories');
+  };
+
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-lg font-semibold mb-4">Add a new Category</h2>
+    <>
+    <div className='flex flex-wrap'>
+    <Sidebar/>
+    <section className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-600 body-font">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-md bg-white rounded-lg shadow-md p-8"
+        >
+        <h2 className="text-gray-900 text-lg font-medium title-font mb-5 text-center">
+          Add Category
+        </h2>
 
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" placeholder="name" {...register("name", {required: true})} />
+        <div className="mb-6">
+          <label htmlFor="category" className="leading-7 text-sm text-gray-600">
+            Category Name
+          </label>
+          <input
+            type="text"
+            id="category"
+            {...register('category', { required: 'Category name is required' })}
+            className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-4 leading-6 transition duration-200"
+            />
+          {errors.category && (
+            <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>
+          )}
+        </div>
 
-      <input type="submit" />
-    </form>
+        <button
+          type="submit"
+          className="w-full text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+          >
+          Add Category
+        </button>
+      </form>
+    </section>
     </div>
-    </div>
+          </>
   );
-}
+};
+
+export default AddCategory;

@@ -2,25 +2,38 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// ✅ Ensure the uploads folder exists
-const uploadDir = path.join(__dirname, "..", "uploads");
+// ✅ Ensure Uploads Directory Exists
+const uploadDir = path.join(__dirname, "../uploads");
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
+    fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// ✅ Configure Multer for image upload
+// ✅ Allowed File Types
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("❌ Invalid file type! Only JPG, JPEG, PNG, and GIF allowed."), false);
+    }
+};
+
+// ✅ Configure Storage for Uploaded Images
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-        const safeName = file.originalname.replace(/\s+/g, "-");
-        cb(null, safeName + "-" + uniqueSuffix);
+        cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.-]/g, "")}`);
     }
 });
 
-// ✅ Export Multer instance correctly
-const upload = multer({ storage });
+// ✅ Multer Setup with Validation & Size Limit (2MB)
+const upload = multer({
+    storage,
+    fileFilter,
+    limits: { fileSize: 2 * 1024 * 1024 },
+});
 
 module.exports = upload;

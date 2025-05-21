@@ -16,8 +16,9 @@ import Dashboard from './components/Dashboard';
 import News from './components/News';
 import Categories from './components/Categories';
 import Addnews from './components/Addnews';
-import AddCategory from './components/AddCategory';
 import App from './App';
+import CategoryNews from './pages/CategoryNews';
+import AddCategory from './components/AddCategory';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -39,7 +40,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/categories" element={<Categories />} />
         <Route path="/addnews" element={<Addnews />} />
         <Route path="/addcategory" element={<AddCategory />} />
-        <Route path="/title" element={<Title />} />
+        {/* <Route path="/title" element={<Title />} /> */}
+            <Route path="/news/category/:categoryId" element={<CategoryNews/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

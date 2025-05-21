@@ -40,7 +40,7 @@ const News = sequelize.define("News", {
 });
 
 // Associations
-News.belongsTo(Category, { foreignKey: "categoryId" });
-Category.hasMany(News, { foreignKey: "categoryId" });
+News.belongsTo(Category, { foreignKey: "categoryId", as:"category" });
+Category.hasMany(News, { foreignKey: "categoryId", as: "news" });
 
 module.exports = News;

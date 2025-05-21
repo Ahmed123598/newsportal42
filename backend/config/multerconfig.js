@@ -1,33 +1,47 @@
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+// const multer = require("multer");
+// const path = require("path");
+// const fs = require("fs");
 
-// ✅ Ensure the "uploads/" folder exists
-const uploadDir = "uploads/";
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
+// // ✅ Ensure the "uploads/" folder exists safely
+// const uploadDir = path.join(__dirname, "../uploads");
+// try {
+//     if (!fs.existsSync(uploadDir)) {
+//         fs.mkdirSync(uploadDir, { recursive: true }); // ✅ Prevents race conditions
+//     }
+// } catch (err) {
+//     console.error("❌ Error creating uploads folder:", err);
+// }
 
-// ✅ Allowed file types
-const fileFilter = (req, file, cb) => {
-    const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
-    const ext = path.extname(file.originalname).toLowerCase();
-    
-    if (allowedExtensions.includes(ext)) {
-        cb(null, true);
-    } else {
-        cb(new Error("Only image files are allowed!"), false);
-    }
-};
+// // ✅ Allowed file types (MIME Type Check Added)
+// const fileFilter = (req, file, cb) => {
+//     const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+//     const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+//     const ext = path.extname(file.originalname).toLowerCase();
 
-// ✅ Configure storage for uploaded images
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Save images in "uploads" folder
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
-    }
-});
+//     if (allowedMimeTypes.includes(file.mimetype) && allowedExtensions.includes(ext)) {
+//         cb(null, true);
+//     } else {
+//         cb(new Error("❌ Invalid file type! Only JPG, JPEG, PNG, and GIF allowed."), false);
+//     }
+// };
 
-// ✅ Multer setup with file validation & size limit (2MB
+// // ✅ Configure storage for uploaded images
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, uploadDir);
+//     },
+//     filename: (req, file, cb) => {
+//         const safeName = file.originalname.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.-]/g, ""); // ✅ Prevents special character issues
+//         cb(null, `${Date.now()}-${safeName}`);
+//     }
+// });
+
+// // ✅ Multer setup with validation & size limit (2MB)
+// const upload = multer({
+//     storage,
+//     fileFilter,
+//     limits: { fileSize: 2 * 1024 * 1024 }, // ✅ 2MB limit
+// });
+
+// // ✅ Export Multer middleware
+// module.exports = upload;
