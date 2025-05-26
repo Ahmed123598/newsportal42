@@ -12,7 +12,7 @@ function World() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news/world');
+                const response = await fetch('http://localhost:3000/api/news/category/3');
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }

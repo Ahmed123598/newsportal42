@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
+
 
 const News = () => {
     const [news, setNews] = useState([]);
@@ -10,7 +10,7 @@ const News = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch("http://localhost:3000/news");
+                const response = await fetch("http://localhost:3000/api/news");
                 if (!response.ok) {
                     throw new Error("Failed to fetch news");
                 }
@@ -32,7 +32,7 @@ const News = () => {
             throw new Error("Unauthorized: No token found");
         }
 
-        const response = await fetch(`http://localhost:3000/news/${id}`, {
+        const response = await fetch(`http://localhost:3000/api/news/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}` // ✅ Include token
@@ -56,7 +56,7 @@ const News = () => {
         if (!updatedTitle) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/news/${id}`, {
+            const response = await fetch(`http://localhost:3000/api/news/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title: updatedTitle }),
@@ -79,11 +79,11 @@ const News = () => {
     return (
         <div>
             <div className="flex h-screen">
-                <Sidebar />
+              
                 <div className="p-4">
                     <div className="flex justify-between items-center mb-4">
                         <span>User Name</span>
-                        <a href="/addnews">
+                        <a href="/admin/addnews">
                             <button className="bg-red-600 text-white px-4 py-2 rounded">New Post</button>
                         </a>
                     </div>

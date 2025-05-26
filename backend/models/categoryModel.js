@@ -7,6 +7,10 @@ const Category = sequelize.define("Category", {
     allowNull: false,
     unique: true,
   },
+  totalNews: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  }
 }, {
   timestamps: true,
   tableName: "categories",

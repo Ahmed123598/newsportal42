@@ -18,7 +18,11 @@ const Navbar = () => {
             <li><Link to="/world" className="text-[#CECECE]">World</Link></li>
             <li><Link to="/business" className="text-[#CECECE]">Business</Link></li>
             <li><Link to="/sports" className="text-[#CECECE]">Sports</Link></li>
-           {token? <li><Link to="/login" className="bg-gray-100 border-0 py-1 px-3 rounded hover:bg-[#CECECE]">Login</Link></li>: <li><Link to="/dashboard" className="bg-gray-100 border-0 py-1 px-3 rounded hover:bg-[#CECECE]">Dashboard</Link></li>}
+          {token ? (
+  <li><Link to="/admin/dashboard" className="bg-gray-100 border-0 py-1 px-3 rounded hover:bg-[#CECECE]">Dashboard</Link></li>
+) : (
+  <li><Link to="/login" className="bg-gray-100 border-0 py-1 px-3 rounded hover:bg-[#CECECE]">Login</Link></li>
+)}
           </ul>
         </nav>
       </div>

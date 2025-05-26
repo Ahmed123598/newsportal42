@@ -25,7 +25,7 @@ localStorage.setItem
       localStorage.setItem('token', res.data.token);
 
       // Redirect to dashboard after successful login
-      navigate('/dashboard');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error("Login Error:", error.response?.data?.message || error.message);
       alert(error.response?.data?.message || "Login failed. Please try again.");

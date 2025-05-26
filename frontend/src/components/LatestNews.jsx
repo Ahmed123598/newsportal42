@@ -9,7 +9,7 @@ const LatestNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/news');
+        const response = await axios.get('http://localhost:3000/api/news');
         const data = response.data;
 
         // Get the latest news per category

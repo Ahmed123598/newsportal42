@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
-import { Link } from "react-router";
+
+import { Link } from "react-router-dom";
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -10,7 +10,7 @@ const Categories = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch("http://localhost:3000/categories");
+                const response = await fetch("http://localhost:3000/api/categories");
                 if (!response.ok) throw new Error("Failed to fetch categories");
                 const data = await response.json();
                 setCategories(data);
@@ -54,11 +54,11 @@ const Categories = () => {
 
     return (
         <div className="flex h-screen">
-            <Sidebar />
+           
             <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
                     <span>User Name</span>
-                    <Link to="/addCategory">
+                    <Link to="/admin/addCategory">
                         <button className="bg-red-600 text-white px-4 py-2 rounded">add Category</button>
                     </Link>
                 </div>

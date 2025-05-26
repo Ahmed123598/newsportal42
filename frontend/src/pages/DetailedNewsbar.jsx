@@ -13,7 +13,7 @@ function DetailedNewsbar() {
     useEffect(() => {
         const getSingleNews = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/news/${id}`);
+                const response = await fetch(`http://localhost:3000/api/news/${id}`);
                 if (!response.ok) {
                     throw new Error('News not found');
                 }

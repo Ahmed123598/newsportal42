@@ -7,17 +7,17 @@ const AddNews = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [selectedImage, setSelectedImage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const API_URL = "http://localhost:3000/news/upload";
+    const API_URL = "http://localhost:3000/api/news/upload";
 
     // ✅ Validate image type before uploading
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         if (!allowedTypes.includes(file.type)) {
-            alert("❌ Invalid file type! Only JPG, JPEG, PNG, and GIF allowed.");
+            alert("❌ Invalid file type! Only JPG, JPEG, PNG, GIF,WEBP, abd SVG allowed.");
             setSelectedImage(null);
         } else {
             setSelectedImage(file);
@@ -64,7 +64,7 @@ const AddNews = () => {
 
     return (
         <div className="flex h-screen">
-            <Sidebar />
+            
             <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
                 <h2 className="text-lg font-semibold mb-4">Add a New News Article</h2>
 

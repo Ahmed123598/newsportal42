@@ -14,7 +14,7 @@ const Category = require("./models/categoryModel");
 // ✅ Import routes
 const userRoutes = require("./routes/UserRouter");
 const newsRoutes = require("./routes/newsRouter");
-
+const categoryRoutes = require("./routes/categoryRouter");
 // ✅ Import authentication middleware
 const authenticateJWT = require("./middlewares/auth");
 
@@ -44,13 +44,17 @@ connectDB();
 // ✅ Sync Models
 const syncDb = async () => {
     try {
-        await sequelize.sync({ alter: true }); // ✅ Ensures models stay updated
+        await sequelize.authenticate(); // ✅ Verifies database connection
+        console.log("✅ Database connected successfully.");
+
+        await sequelize.sync(); // ✅ Sync models WITHOUT altering existing tables
         console.log("✅ Database models synchronized.");
+        
     } catch (error) {
         console.error("❌ Database sync error:", error);
     }
 };
-// syncDb();
+syncDb();
 
 // ✅ Simple Test Route (`GET /`)
 app.get("/", (req, res) => {
@@ -58,9 +62,9 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Mount Routes
-app.use("/users", userRoutes);
-app.use("/news", newsRoutes);
-
+app.use("/api/users", userRoutes);
+app.use("/api/news", newsRoutes);
+app.use("/api/categories", categoryRoutes);
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -94,14 +98,14 @@ app.get("/dashboard", authenticateJWT, async (req, res) => {
     }
 });
 
-app.get("/categories", async (req, res) => {
-    try {
-        const categories = await Category.findAll();
-        res.json(categories);
-    } catch (error) {
-        res.json({ error: error.message });
-    }
-});
+// app.get("/categories", async (req, res) => {
+//     try {
+//         const categories = await Category.findAll();
+//         res.json(categories);
+//     } catch (error) {
+//         res.json({ error: error.message });
+//     }
+// });
 
 // ✅ Start Server
 app.listen(port, () => {

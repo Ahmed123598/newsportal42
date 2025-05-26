@@ -2,16 +2,8 @@ const express = require("express");
 const router = express.Router();
 const News = require("../models/newsModel");
 const authenticateJWT = require("../middlewares/auth");
-// const multer = require("multer");
-// const path = require("path");
-// const fs = require("fs");
 const upload = require("../middlewares/upload");
-const Category = require("../models/categoryModel"); // ✅ Import Category model
-
-
-// const cors = require("cors");
-
-// router.use(cors()); 
+// const Category = require("../models/categoryModel"); // ✅ Import Category model
 
 router.get("/dashboard", authenticateJWT, async (req, res) => {
     try {
@@ -35,7 +27,7 @@ router.get("/dashboard", authenticateJWT, async (req, res) => {
     }
 });
 
-
+//  Upload News Article with Image
 router.post("/upload", authenticateJWT, upload.single("image"), async (req, res) => {
     try {
         console.log("🔍 Incoming Request Body:", req.body);
@@ -64,7 +56,7 @@ router.post("/upload", authenticateJWT, upload.single("image"), async (req, res)
 
         console.log("✅ News Successfully Added:", newNews);
 
-        await Category.increment("totalNews", { by: 1, where: { id: categoryId } });
+        // await Category.increment("totalNews", { by: 1, where: { id: categoryId } });
         res.status(201).json({ message: "✅ News created successfully!", news: newNews });
     } catch (error) {
         console.error("❌ Error adding news:", error);
@@ -73,26 +65,7 @@ router.post("/upload", authenticateJWT, upload.single("image"), async (req, res)
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Fetch All News
 router.get("/", async (req, res) => {
     try {
         const news = await News.findAll();
@@ -131,23 +104,23 @@ router.get("/category/:categoryId", async (req, res) => {
 
 
 
-router.get('/india',async(req,res)=>{
- const indiaNews= await News.findAll({where:{categoryId:4}})
- res.json(indiaNews)
-})
-router.get('/world',async(req,res)=>{
- const worldNews= await News.findAll({where:{categoryId:3}})
- res.json(worldNews)
-})
-router.get('/sports',async(req,res)=>{
- const SportsNews= await News.findAll({where:{categoryId:1}})
- res.json(SportsNews)
-})
-router.get('/business',async(req,res)=>{
- const businessNews= await News.findAll({where:{categoryId:2}})
- res.json(businessNews)
-})
-
+// router.get('/india',async(req,res)=>{
+//  const indiaNews= await News.findAll({where:{categoryId:4}})
+//  res.json(indiaNews)
+// })
+// router.get('/world',async(req,res)=>{
+//  const worldNews= await News.findAll({where:{categoryId:3}})
+//  res.json(worldNews)
+// })
+// router.get('/sports',async(req,res)=>{
+//  const SportsNews= await News.findAll({where:{categoryId:1}})
+//  res.json(SportsNews)
+// })
+// router.get('/business',async(req,res)=>{
+//  const businessNews= await News.findAll({where:{categoryId:2}})
+//  res.json(businessNews)
+// })
+// Fetch News by ID
 router.get('/:id', async (req, res) => {
     try {
         const newsId = parseInt(req.params.id, 10);

@@ -10,7 +10,7 @@ function LatestBusiness() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news/business');
+                const response = await fetch('http://localhost:3000/api/news/category/2');
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }

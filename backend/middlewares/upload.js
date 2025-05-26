@@ -4,20 +4,23 @@ const fs = require("fs");
 
 // ✅ Ensure Uploads Directory Exists
 const uploadDir = path.join(__dirname, "../uploads");
+
+// ✅ Ensure Uploads Directory Exists
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// ✅ Allowed File Types
-const fileFilter = (req, file, cb) => {
-    const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+const allowedFormats = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
 
-    if (allowedMimeTypes.includes(file.mimetype)) {
+const fileFilter = (req, file, cb) => {
+    if (allowedFormats.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error("❌ Invalid file type! Only JPG, JPEG, PNG, and GIF allowed."), false);
+        cb(new Error("❌ Only JPG, PNG, GIF, WEBP, and SVG allowed!"), false);
     }
 };
+
+
 
 // ✅ Configure Storage for Uploaded Images
 const storage = multer.diskStorage({

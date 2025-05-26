@@ -12,7 +12,8 @@ function India() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await fetch('http://localhost:3000/news/india');
+                const response = await fetch('http://localhost:3000/api/news/category/4'); // ✅ Updated API structure
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch news');
                 }

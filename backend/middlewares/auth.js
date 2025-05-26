@@ -16,6 +16,7 @@ const verifyToken = (req, res, next) => {
     req.user = verified; // Attach verified user data to the request
     next();
   } catch (error) {
+    console.error("🔴 Token verification failed:", error); 
     res.status(401).json({ error: "Invalid token" });
   }
 };
